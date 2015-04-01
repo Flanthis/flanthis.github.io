@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+	<head>
+	</head>
+	<body>
+		<form>
+			<h2>Bingo Row Generator</h2>
+			<p>
+				<label>Row: </label>
+				<select id="row" name="row">
+					<option>ROW1</option>
+					<option>ROW2</option>
+					<option>ROW3</option>
+					<option>ROW4</option>
+					<option>ROW5</option>
+					<option>COL1</option>
+					<option>COL2</option>
+					<option>COL3</option>
+					<option>COL4</option>
+					<option>COL5</option>
+					<option>TL-BR</option>
+					<option>BL-TR</option>
+					<option>Restriction</option>
+				</select>
+			</p>
+			<p id="goalList">
+			</p>
+			<input type="button" onclick="fetchPopup();" value="Generate!"/>
+		</form>
+		<script>
+			for (i = 0; i < 10; i++)
+				addGoal();
+			
+			function addGoal()
+			{
+				var goals = document.getElementsByClassName("goals");
+				if (goals.length < 10)
+				{
+					var div = document.createElement("div");
+					div.className = "goal";
+					var label = document.createElement("label");
+					label.innerHTML = "Goal " + (goals.length + 1) + ": "; 
+					div.appendChild(label);
+					var text = document.createElement("input");
+					text.type = "text";
+					text.className = "goals";
+					div.appendChild(text);
+					document.getElementById("goalList").appendChild(div);
+				}
+				else
+					alert("Too many goals!");
+			}
+			
+			function fetchPopup()
+			{
+				var goals = document.getElementsByClassName("goals");
+				
+				//scan for empty goals
+				for (i = 0; i < goals.length - 1; i++)
+					for (j = i + 1; goals[i].value == "" && j < goals.length; j++)
+					{
+						goals[i].value = goals[j].value;
+						goals[j].value = "";
+					}
+				
+				var link = "http://www.srlbingo.com/popout?rowName=" + document.getElementById("row").value;
+				for (var i = 0; i < goals.length; i++)
+					link += "&goal" + i + "=" + goals[i].value;
+				open(link, "_blank", "width=220, height=460");
+			}
+		</script>
+	</body>
+</html>
